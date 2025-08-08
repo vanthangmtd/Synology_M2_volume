@@ -3,48 +3,25 @@
 
 Easily create an M.2 volume on Synology NAS without a lot of typing and no need for any how-to guides. And you ***don't*** need Synology branded NVMe drives.
 
-This script creates the RAID and storage pool on your NVMe drive(s) so you can then create the volume in the Storage Manager.
+- **DSM 7** This script creates the RAID and storage pool on your NVMe drive(s) so you can then create the volume in the DSM GUI.
+- **DSM 6** This script creates the RAID, storage pool and volume on your NVMe drive(s) for you.
 
-All you have to do is run the script and type yes and 1, 2, 3 or 4 to answer some simple questions. Then go to Storage Manager and select Create Volume.
+All you have to do is run the script and type yes and 1, 2, 3 or 4 to answer some simple questions. Then reboot, go to Storage Manager, Online Assemble and Create Volume.
 
 It also allows you to create a storage pool/volume spanning internal NVMe drives and NVMe drives in a Synology M.2 PCIe card.
 
-For Xpenology users the script supports an unlimited number of NVMe drives (except for RAID 1 and Basic).
-
-**Supports DSM 7 and later** 
-
-For [DSM 6 use v1](https://github.com/007revad/Synology_M2_volume/releases/tag/v1.3.25) and run **without** the auto update option.
-
-**NEW in v2**
-- Now shows "M.2 Drive #" the same as storage manager.
-- Now uses synostgpool command which allows the following: (Thanks to Severe_Pea_2128 on reddit)
-  - Now supports JBOD, SHR, SHR2 and RAID F1.
-  - Added choice of multi-volume or single-volume storage pool. Multi-volume allows overprovisioning.
-  - Added option to skip drive check.
-  - No longer need to reboot after running the script.
-  - No longer need to do an online assemble.
-- Removed drive check progress as it was not possible with synostgpool.
-  - You can see the drive check progress in Storage Manager.
-- Removed dry run mode as it was not possible with synostgpool.
-- Removed support for SATA M.2 drives.
-  - If you have SATA M.2 drives [use v1](https://github.com/007revad/Synology_M2_volume/releases/tag/v1.3.25) and run **without** the auto update option.
+For Xpenology users the script supports an unlimited number of NVMe drives for RAID 0, 5, 6 and 10.
 
 ### RAID levels supported
 
-| RAID Level  | Min Drives Required  | Maximum Drives | Script version |
-| ----------- |------------------|----------------|----------------|
-| SHR 1       | 1 or more drives | Unlimited      | v2 and later (DSM 7 only) |
-| SHR 2       | 4 or more drives | Unlimited      | v2 and later (DSM 7 only) |
-| Basic       | 1 drive          | 1 drive        | all |
-| JBOD        | 1 or more drives | Unlimited      | v2 and later (DSM 7 only) |
-| RAID 0      | 2 or more drives | Unlimited      | all |
-| RAID 1      | 2 or more drives | 4 drives       | all |
-| RAID 5      | 3 or more drives | Unlimited      | all |
-| RAID 6      | 4 or more drives | Unlimited      | v1.3.15 and later |
-| RAID 10     | 4 or more drives | Unlimited      | v1.3.15 and later |
-| RAID F1     | 3 or more drives | Unlimited      | v2 and later (DSM 7 only) |
-
-If RAID F1 is selected the script enables RAID F1 on Synology models that don't officially support RAID F1.
+| RAID Level  | Drives Required  | Maximum Drives |
+| ----------- |------------------|----------------|
+| Single      | 1 drive          | 1 drive        |
+| RAID 0      | 2 or more drives | Unlimited      |
+| RAID 1      | 2 or more drives | 4 drives       |
+| RAID 5      | 3 or more drives | Unlimited      |
+| RAID 6      | 4 or more drives | Unlimited      |
+| RAID 10     | 4 or more drives | Unlimited      |
 
 ### Confirmed working on
 
@@ -53,20 +30,13 @@ If RAID F1 is selected the script enables RAID F1 on Synology models that don't 
 
 | Model        | DSM version              | M.2 card  | Notes           |
 | ------------ |--------------------------|-----------|-----------------|
-| All          | DSM 6                    |           | [Use v1](https://github.com/007revad/Synology_M2_volume/releases/tag/v1.3.25) run without auto update option |
 | RS2423+      | DSM 7.2-64570 Update 1   |           |
 | DS1823xs+    | DSM 7.2-64561            | M2D20     |
-| DS923+       | DSM 7.2.2-72806 Update 3 |           |
-| DS923+       | DSM 7.2.2-72806 Update 2 |           |
-| DS923+       | DSM 7.2.2 72806 Update 1 |           |
-| DS923+       | DSM 7.2.1-69057 Update 5 |           |
 | DS923+       | DSM 7.2.1-69057 Update 2 |           |
 | DS923+       | DSM 7.1.1-42962 Update 5 |           |
-| DS723+       | DSM 7.2.2-72806 Update 2 |           |
 | DS723+       | DSM 7.2.1-69057 Update 3 |           |
 | DS723+       | DSM 7.2-64570 Update 1   |           |
 | DS723+       | DSM 7.1.1-42962 Update 4 |           |
-| DS423+       | DSM 7.2.2-72806          |           |
 | DS423+       | DSM 7.2.1-69057 Update 3 |           |
 | DS423+       | DSM 7.2-64570 Update 3   |           |
 | DS423+       | DSM 7.1.1-42962 Update 4 |           |
@@ -93,7 +63,7 @@ If RAID F1 is selected the script enables RAID F1 on Synology models that don't 
 | DS1821+      | DSM 7.2-64216 Beta       |           |
 | DS1821+      | DSM 7.2-64213 Beta       |           |
 | DS1821+      | DSM 7.1.1-42962 Update 4 |           |
-| DS1621xs+    | DSM 7.2.1-69057 Update 5 |           |
+| DS1821+      | **DSM 6.2.4**-25556 Update 7 |           |
 | DS1621+      | DSM 7.2-64570 Update 1   | E10M20-T1 | Also needs [Synology enable_M2_card](https://github.com/007revad/Synology_enable_M2_card) |
 | DS1621+      | DSM 7.2-64570 Update 1   |           |
 | DS1621+      | DSM 7.1.1-42962 Update 4 |           |
@@ -102,11 +72,6 @@ If RAID F1 is selected the script enables RAID F1 on Synology models that don't 
 | DS1520+      | DSM 7.2.1-69057 Update 2 |           |
 | DS1520+      | DSM 7.2-64570 Update 1   |           |
 | DS1520+      | DSM 7.1.1-42962 Update 4 |           |
-| DS920+       | DSM 7.2.2 72806 Update 3 |           |
-| DS920+       | DSM 7.2.2 72806 Update 2 |           |
-| DS920+       | DSM 7.2.2 72806 Update 1 |           |
-| DS920+       | DSM 7.2.2-72806          |           |
-| DS920+       | DSM 7.2.1-69057 Update 5 |           |
 | DS920+       | DSM 7.2.1-69057 Update 4 |           |
 | DS920+       | DSM 7.2.1-69057 Update 3 |           |
 | DS920+       | DSM 7.2.1-69057 Update 2 |           |
@@ -116,14 +81,9 @@ If RAID F1 is selected the script enables RAID F1 on Synology models that don't 
 | DS920+       | DSM 7.2-64561            |           |
 | DS920+       | DSM 7.2-64216 Beta       |           |
 | DS920+       | DSM 7.1.1-42962 Update 1 |           |
-| RS1619xs+    | DSM 7.2.2-72806 Update 3 |           |
+| DS920+       | **DSM 6**                |           |
 | DS918+       | DSM 7.2-64570 Update 3   |           |
 | RS820+       | DSM 7.2-64570 Update 3   | M2D20     |
-| DS720+       | DSM 7.2.2 72806 Update 3 |           |
-| DS720+       | DSM 7.2.2 72806 Update 2 |           |
-| DS720+       | DSM 7.2.2 72806 Update 1 |           |
-| DS720+       | DSM 7.2.2-72806          |           |
-| DS720+       | DSM 7.2.1-69057 Update 5 |           |
 | DS720+       | DSM 7.2.1-69057 Update 4 |           |
 | DS720+       | DSM 7.2.1-69057 Update 3 |           |
 | DS720+       | DSM 7.2.1-69057 Update 2 |           |
@@ -134,15 +94,14 @@ If RAID F1 is selected the script enables RAID F1 on Synology models that don't 
 | DS720+       | DSM 7.2-64570            |           |
 | DS720+       | DSM 7.2-64561            |           |
 | DS720+       | DSM 7.2-64216 Beta       |           |
+| DS720+       | **DSM 6.2.4**            |           |
 | DS420+       | DSM 7.2-64570 Update 1   |           |
 | DS1819+      | DSM 7.2-64216 Beta       | M2D20     |
 | DS1819+      | DSM 7.1.1                | M2D20     |
-| DS1019+      | DSM 7.2.2-72806          |           |
 | DS1019+      | DSM 7.2.1-69057 Update 2 |           |
 | DS1019+      | DSM 7.2-64561            |           |
 | DS1019+      | DSM 7.1.1-42962 Update 4 |           |
 | DS1618+      | DSM 7.1.1                | M2D18     |
-| DS918+       | DSM 7.2.1-69057 Update 5 |           |
 | DS918+       | DSM 7.2-64561            |           |
 | DS918+       | DSM 7.1.1                |           |
 | DS3617xs     | DSM 7.2-64570            | M2D20     |
@@ -158,6 +117,10 @@ If you later update DSM and your M.2 drives are shown as unsupported and the sto
 1. Download the latest version _Source code (zip)_ from https://github.com/007revad/Synology_M2_volume/releases
 2. Save the download zip file to a folder on the Synology.
 3. Unzip the zip file.
+
+### Video guide
+
+Vikash has created a step by step YouTube video here: https://www.youtube.com/watch?v=sclQprHsXQE
 
 ### To run the script via SSH
 
@@ -191,9 +154,17 @@ If the script won't run check the following:
   -v, --version    Show the script version
 ```
 
+It also has a dry run mode so you can see what it would have done had you run it for real.
+
+<p align="center"><img src="/images/create-volume0.png"></p>
+
 ### What to do after running the script
 
-1. Create the volume as you normally would:
+**DSM 7**
+1. Restart the Synology NAS.
+2. Go to Storage Manager and select Online Assemble:
+    - Storage Pool > Available Pool > Online Assemble
+3. Create the volume as you normally would:
     - Select the new Storage Pool > Create > Create Volume.
     - Set the allocated size.
       - Optionally enter a volume description. Be creative :)
@@ -204,34 +175,31 @@ If the script won't run check the following:
     - Confirm your settings and click Apply to finish creating your M.2 volume.
 4. Optionally enable and schedule TRIM:
     - Storage Pool > ... > Settings > SSD TRIM    
-    - **Note: DSM 7.2 and later has no SSD TRIM setting for M.2 RAID 0**
     - **Note: DSM 7.1.1. has no SSD TRIM setting for M.2 storage pools**
+    - **Note: DSM 7.2 Beta has no SSD TRIM setting for M.2 RAID 0 or RAID 5**
 
------
-### How to repair a NVMe storage pool or upgrade to larger drives
+**DSM 6**
+1. Restart the Synology NAS.
 
-- Repair degraded storage pool in DSM 7.2 or later
-  - [Repair NVMe RAID 1 in internal M.2 slots](https://github.com/007revad/Synology_M2_volume/wiki/Repair-M.2-RAID-1-in-internal-M.2-slots)
-  - [Repair NVMe RAID 1 in adaptor card](https://github.com/007revad/Synology_M2_volume/wiki/Repair-M.2-RAID-1-in-adaptor-card)
-- Upgrade to larger NVMe drives in DSM 7.2 or later
-  - [Replace M.2 RAID 1 with larger drives](https://github.com/007revad/Synology_M2_volume/wiki/Replace-M.2-RAID-1-with-larger-drives)
-- Repair via SSH for DSM 6
-  - [How Synology Support repairs RAID in DSM 6](https://github.com/007revad/Synology_M2_volume/wiki/Repair-RAID-via-SSH)
-
------
 ### DSM 7 screen shots
 
-<p align="center">Create SHR Storage Pool</p>
-<p align="center"><img src="/images/create_shr_v2.png"></p>
+<p align="center">Storage Pool available for Online Assemble</p>
+<p align="center"><img src="/images/create_m2_volume_available_pool.png"></p>
+
+<p align="center">Online Assemble step 1</p>
+<p align="center"><img src="/images/create_m2_volume_online_assemble.png"></p>
+
+<p align="center">Online Assemble step 2</p>
+<p align="center"><img src="/images/create_m2_volume_online_assemble2.png"></p>
 
 <p align="center">Create Volume</p>
 <p align="center"><img src="/images/create-volume1.png"></p>
 
-<p align="center">Volume description</p>
-<p align="center"><img src="/images/create-volume3.png"></p>
-
 <p align="center">Allocate volume capacity</p>
 <p align="center"><img src="/images/create-volume2.png"></p>
+
+<p align="center">Volume description</p>
+<p align="center"><img src="/images/create-volume3.png"></p>
 
 <p align="center">Select file system</p>
 <p align="center"><img src="/images/create-volume4.png"></p>
